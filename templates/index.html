@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Porfolio{% endblock %}
+
+{% block main %}
+{% for user in users %}
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Symbol</th>
+        <th scope="col">Name</th>
+        <th scope="col">Shares</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item,price in combined %}
+        {% if item["quantity"] > 0 %}
+        <tr>
+            <td>{{item["symbol"]}}</td>
+            <td>{{item["symbol"]}}</td>
+            <td>{{item["quantity"]}}</td>
+            <td>{{'%.2f'|format(price)}}</td>
+            <td>{{'%.2f'|format(price * item["quantity"])}}</td>
+          </tr>
+        {% else %}
+        {% endif %}
+      {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="border-0 fw-bold  " colspan="3"></td>
+            <td class="border-0 fw-bold  " colspan="1">Cash</td>
+            <td class="border-0">{{ '%.2f' | format(user["cash"]) }}</td>
+        </tr>
+        <tr>
+            <td class="border-0 fw-bold  " colspan="3"></td>
+            <td class="border-0 fw-bold " colspan="1">Total</td>
+            <td class="border-0 ">{{'%.2f'|format(user["cash"]+sum)}}</td>
+        </tr>
+    </tfoot>
+  </table>
+{% endfor %}
+{% endblock %}
