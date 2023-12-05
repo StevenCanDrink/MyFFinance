@@ -2,11 +2,11 @@ import os
 
 from datetime import datetime
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-
-from helpers import apology, login_required, lookup, usd
+import asyncio
+from helpers import apology, login_required, lookup, usd, askChatBot
 
 # Configure application
 app = Flask(__name__)
@@ -39,6 +39,9 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
+    messages = [
+        {"role": "system", "content": "You are a helpful and kind AI Assistant."},
+    ]
     """Show portfolio of stocks"""
     if session["user_id"] == "":
         return redirect("/login")
@@ -53,6 +56,7 @@ def index():
     sum = 0
     for price, quantity in zip(prices, quantity):
         sum += price * quantity
+
     return render_template(
         "index.html",
         users=users,
@@ -178,7 +182,7 @@ def quote():
             return apology("INVALID 400")
         respFromAPI = lookup(symbol)
         respFromAPI["price"] = usd(respFromAPI["price"])
-        return render_template("quoted.html", symbol=respFromAPI)
+        return jsonify(respFromAPI)
     else:
         return render_template("quote.html")
 
@@ -205,6 +209,9 @@ def register():
             "INSERT INTO users (username,hash) VALUES(?,?)", name, hashedPassword
         )
         flash("Registered")
+        session["user_id"] = db.execute("SELECT * FROM users WHERE username = ?", name)[
+            0
+        ]["id"]
         return redirect("/")
     else:
         return render_template("register.html")

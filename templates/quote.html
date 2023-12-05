@@ -2,12 +2,39 @@
 
 {% block title %}Quote{% endblock %}
 {% block main %}
-<form action="/quote" method="POST">
+
+<div class="position-relative">
+    <div id="infodiv" class="position-absolute top-0 start-50 translate-middle" style="background-color: green;color: white ;width: 300px;"></div>
+</div>
+<br>
+<form>
     <div class="mb-3">
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="symbol" placeholder="Symbol" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto"  id="symbolInput"  name="symbol" placeholder="Symbol" type="text">
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" onclick ="ajax_request()" class="btn btn-primary">Submit</button>
 </form>
+<script>
+    function ajax_request() {
+        var symbol = document.getElementById("symbolInput").value;
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4 && ajax.status == 200) {
+                var respFromAPI = JSON.parse(ajax.responseText)
+                document.getElementById("infodiv").innerHTML =`Symbol: ${respFromAPI.symbol}, Price ${respFromAPI.price}`
+                document.getElementById("infodiv").style.backgroundColor = "green"
+                
+        }else{
+            document.getElementById("infodiv").innerHTML =`Symbol of Stock wasn't Valid`
+            document.getElementById("infodiv").style.backgroundColor = "red"
+        }
+     
+    };
+    event.preventDefault();
+    ajax.open("POST", "/quote", true);
+    ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    ajax.send("symbol="+symbol);
+    }
+</script>
 {% endblock %}
