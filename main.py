@@ -5,7 +5,6 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-import asyncio
 from helpers import apology, login_required, lookup, usd, askChatBot
 
 # Configure application

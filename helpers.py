@@ -6,9 +6,9 @@ import subprocess
 import urllib
 import uuid
 import json
-from openai import OpenAI
+# from openai import OpenAI
 
-import asyncio
+# import asyncio
 import os
 from flask import redirect, render_template, session
 from functools import wraps
@@ -94,28 +94,28 @@ def usd(value):
     return f"${value:,.2f}"
 
 
-async def askChatBot(content, dictionary):
-    api_key = "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"
-    client = OpenAI(api_key)
-    messages = [{"role": "user", "content": content}]
+# async def askChatBot(content, dictionary):
+#     api_key = "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"
+#     client = OpenAI(api_key)
+#     messages = [{"role": "user", "content": content}]
 
-    try:
-        context = " ".join(dictionary.values())
-    except AttributeError:
-        context = " "
+#     try:
+#         context = " ".join(dictionary.values())
+#     except AttributeError:
+#         context = " "
 
-    conservation = [
-        {"role": "user", "content": content},
-        {"role": "bot", "content": context},
-    ]
+#     conservation = [
+#         {"role": "user", "content": content},
+#         {"role": "bot", "content": context},
+#     ]
 
-    response = client.chat.completions.create(
-        model="davinci-002",
-        messages=conservation,
-    )
-    # Add a new entry to the dictionary
-    dictionary.append(
-        {"role": "bot", "content": response.choices[0].message["content"]}
-    )
-    dictionary.append(messages)
-    return response
+#     response = client.chat.completions.create(
+#         model="davinci-002",
+#         messages=conservation,
+#     )
+#     # Add a new entry to the dictionary
+#     dictionary.append(
+#         {"role": "bot", "content": response.choices[0].message["content"]}
+#     )
+#     dictionary.append(messages)
+#     return response
