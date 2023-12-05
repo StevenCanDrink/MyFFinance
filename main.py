@@ -5,7 +5,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from helpers import apology, login_required, lookup, usd, askChatBot
+from helpers import apology, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
@@ -38,9 +38,6 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    messages = [
-        {"role": "system", "content": "You are a helpful and kind AI Assistant."},
-    ]
     """Show portfolio of stocks"""
     if session["user_id"] == "":
         return redirect("/login")
